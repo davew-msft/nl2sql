@@ -8,15 +8,21 @@ To use this:
 ```bash
 cd adventureworks-sql-server-container
 
-# it will throw warnings b/c I'm lazy.  Sorry.  
-docker build -t sql-server-nl2sql:latest . \
-    -e "MSSQL_SA_PASSWORD=Pawws0rd01!!"
+docker pull mcr.microsoft.com/mssql/server:2019-latest
 
-docker run -d --rm \
-    --name sql-server-nl2sql \
-    -e "ACCEPT_EULA=Y" \
-    -e "MSSQL_SA_PASSWORD=Pawws0rd01!!" \
-    -p 5533:1433 sql-server-nl2sql:latest 
+docker run -e 'ACCEPT_EULA=Y' \
+   -e 'SA_PASSWORD=Password01!!' \
+   -p 1433:1433 \
+   -h DockerSQL \
+   --name DockerSQL \
+   -d \
+   mcr.microsoft.com/mssql/server:2019-latest
+
+# now we need to install AdventureWorks in the container
+docker exec -it sql-server-nl2sql /bin/bash
+# this will open up a prompt _from within the container_.  
+
+
 
 # having issues? try one of these
 docker logs sql-server-nl2sql -f
@@ -28,7 +34,7 @@ docker exec -it sql-server-nl2sql /bin/bash
 
 
 # cleanup, when done using this
-docker stop sql-server-nl2sql
-docker rm sql-server-nl2sql
-docker image rm sql-server-nl2sql
+docker stop DockerSQL
+docker rm DockerSQL
+
 ```
