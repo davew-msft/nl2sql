@@ -11,6 +11,9 @@ Philadelphia, PA 19107
 
 Being able to _chat with your data_ gets your users closer to the promise of true self-service analytics.  This is known as NL2SQL.  These solutions can be created in under an hour against just about any database.  However, just being able to have an LLM understand what you are asking and convert the request to SQL statements tends to be underwhelming.  What you need are some advanced techniques that most people don't think about that will make your solution truly valuable for your business users.  I'll show you how to embed business logic for YOUR business directly in the process.  Then I'll show you how to write QUALITY tests to ensure your users are getting the RIGHT answers from your data and we'll even show you how to have your LLM predict similar questions that your users may ask and offer those SUGGESTIONS to your users.  Then we'll show you how to ask PRESCRIPTIVE questions about your data that are nearly impossible to answer with just SQL, such as "Why did my sales go down last quarter and how can I prevent that next quarter?".  Finally, I'll show you how to build an MCP server that your users can leverage to run their queries.  
 
+
+
+
 ### About Dave Wentzel
 
 * [dave@davewentzel.com](dave@davewentzel.com) 
@@ -36,6 +39,14 @@ As [Microsoft Innovation Hub's](https://www.microsoft.com/en-us/hub) analytics a
     * we can again solve this with few-shot prompting.
 
 
+
+other
+### Why does this matter?  What does a solution like this solve?  
+
+“I don’t want to spend hours setting up DB and APIs: use an MCP
+“My data model keeps changing as I test ideas:  schema evolution handled automatically 
+You can use it to provision databases, etc
+Create a database schema, in SQL Server 2025 format, for a travel agency.  It should include…
 
 is there a better way to do all of this? can we use a search index to help us? YES. Using a search index to aid nl2sql  https://github.com/davew-msft/pssug-genai/blob/main/nlsql-search-index.md
 TAG and LOTUS
@@ -64,5 +75,9 @@ _I assume you are using bash, ubuntu, wsl 2.0, or some other similar bash-like e
 
 `git clone https://github.com/davew-msft/nl2sql.git`
 
-3. Get a SQL Server with AdventureWorks installed.  [Use the docker container with this repo](./adventureworks-sql-server-container/README.md)
+3. Get a SQL Server with AdventureWorks installed.  [Use the docker container with this repo](./adventureworks-sql-server-container/README.md).  I have everything there that you should need to _chat with your data_.  
+
+>If you want to use your own data/database, that's great.  You just need to change some of the assumptions made throughout the rest of this repo.  
+
+
 
