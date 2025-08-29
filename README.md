@@ -39,8 +39,17 @@ As [Microsoft Innovation Hub's](https://www.microsoft.com/en-us/hub) analytics a
 ## Demos and Code You Can Do Yourself
 
 We'll start with the simplest solutions to setup and move along the path to solutions that require a bit more work but provide better results.  
-* The Fastest Time to Value:  Fabric Data Agents
+* The Fastest Time to Value:  [Fabric Data Agents](https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent)
 * The Easiest Approach if you aren't on Fabric: simply write a little code that directs an LLM as to how to query your db, then have a little code that executes the sql
+  * Let's look at this in more detail...[structured_data_retreival_nltosql.ipynb](structured_data_retreival_nltosql.ipynb)
+  * Key Concepts:
+    * the _schema_ and _business logic_ is hardcoded right in the prompt
+    * we do `few shot learning` (give it a few examples of relevant SQL -- this is VERY helpful to the LLM and it a great technique for describing business logic directly in the SQL.  ie, `WHERE IsActive = 1`)
+    * after the SQL is executed we store the results in a `pandas` dataframe.  This has some benefits, namely:
+      * I can display the data as a table
+      * I can graph it using something like `matplotlib` or `plotly` in the browser
+      * I can pass the results to the next step in the orchestration workflow
+      * I can simply use the results to generate an answer to the original question.  
 * Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools
 * Full State Machine Approach
 
