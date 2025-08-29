@@ -12,8 +12,6 @@ Philadelphia, PA 19107
 Being able to _chat with your data_ gets your users closer to the promise of true self-service analytics.  This is known as NL2SQL.  These solutions can be created in under an hour against just about any database.  However, just being able to have an LLM understand what you are asking and convert the request to SQL statements tends to be underwhelming.  What you need are some advanced techniques that most people don't think about that will make your solution truly valuable for your business users.  I'll show you how to embed business logic for YOUR business directly in the process.  Then I'll show you how to write QUALITY tests to ensure your users are getting the RIGHT answers from your data and we'll even show you how to have your LLM predict similar questions that your users may ask and offer those SUGGESTIONS to your users.  Then we'll show you how to ask PRESCRIPTIVE questions about your data that are nearly impossible to answer with just SQL, such as "Why did my sales go down last quarter and how can I prevent that next quarter?".  Finally, I'll show you how to build an MCP server that your users can leverage to run their queries.  
 
 
-
-
 ### About Dave Wentzel
 
 * [dave@davewentzel.com](dave@davewentzel.com) 
@@ -26,7 +24,7 @@ As [Microsoft Innovation Hub's](https://www.microsoft.com/en-us/hub) analytics a
 ## Agenda
 
 * Intro:  Why are we here?  Why does this matter?  
-* Quick overview of NL2SQL solutions using Microsoft Fabric (pre-baked, shows the _Art of the Possible_)
+* Quick demo of NL2SQL solutions using Microsoft Fabric (pre-baked, shows the _Art of the Possible_)
 * Why is NL2SQL still _underwhelming_ wrt "self-service analytics"?  
   * we can definitely do nl2sql...that's easy, but there are VERY difficult problems we still need to solve
     * complex schemas (lots of tables with goofy naming conventions, non-intuitive join keys, complex filter conditions like adding `WHERE status = 1` to all queries).  we can handle this with judicious views
@@ -38,6 +36,90 @@ As [Microsoft Innovation Hub's](https://www.microsoft.com/en-us/hub) analytics a
     * `active customer` could mean "customers who bought something in the last 3 months" at one company, but 6 months at another company
     * we can again solve this with few-shot prompting.
 
+## Demos and Code You Can Do Yourself
+
+We'll start with the simplest solutions to setup and move along the path to solutions that require a bit more work but provide better results.  
+* The Fastest Time to Value:  Fabric Data Agents
+* The Easiest Approach if you aren't on Fabric: simply write a little code that directs an LLM as to how to query your db, then have a little code that executes the sql
+* Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools
+* Full State Machine Approach
+
+```python
+def get_sql_process(self) -> KernelProcess:
+    """Build and configure the SQL generation process with all steps and their transitions."""
+    process = ProcessBuilder(name="SQLGenerationProcess")
+
+    # Add steps to the process
+    table_step = process.add_step(TableNameStep)
+    column_step = process.add_step(ColumnNameStep)
+    sql_generation_step = process.add_step(SQLGenerationStep)
+    business_rules_step = process.add_step(BusinessRulesStep)
+    validation_step = process.add_step(ValidationStep)
+    execution_step = process.add_step(ExecutionStep)
+
+    # Define the process flow
+    process.on_input_event(event_id=SQLEvents.StartProcess).send_event_to(target=table_step, parameter_name="data")
+    
+    table_step.on_event(event_id=SQLEvents.TableNameStepDone).send_event_to(
+        target=column_step, parameter_name="data"
+    )
+    
+    column_step.on_event(event_id=SQLEvents.ColumnNameStepDone).send_event_to(
+        target=sql_generation_step, parameter_name="data"
+    )
+    
+    # ...additional event flow definitions...
+
+    return process.build()
+
+```
+
+Most importantly, the system includes feedback loops. If validation fails at any stage, the process can return to an earlier step with information about what went wrong, enabling iterative refinement.
+
+From an LLM perspective, which is MUCH EASIER to understand, this is approximately what the prompt will look like:
+
+```python
+get_table_names_prompt_template = """
+## Instructions:
+You are an advanced SQL query generator. Your task is to extract the relevant table names using the following **natural language question** from a list of business tables. 
+
+You **MUST** take a conservative approach: if in doubt whether a table is relevant or not, then you need to include it in the list. It is better to have it and not need it than to need it and not have it. Make sure to review the Business Rules when deciding on the table names.
+
+Make sure to include all foreign keys and relationships that are relevant to the user's question that are necessary to join the tables. If the tables do not have direct relationships, please analyze the situation and include any intermediary tables that can join the tables, and might be necessary to answer the user's question.
+
+## **Business Rules**
+{rules}
+
+## User Query
+{user_query}
+
+## START OF LIST OF TABLES
+{table_list}
+## END OF LIST OF TABLES
+
+# **Inputs from previous generation rounds**
+...
+"""
+
+```
+
+* NL2SQL "Agentically" (processing in stages using a "state machine" approach)
+This approach solves a key challenge in NL2SQL systems – balancing the need to understand what data is available (tables/columns) with how to properly query it (syntax/semantics).  But it requires more work
+
+
+Find the medication adherence level distribution for elderly patients (age 65+)
+
+## What's Next
+TAG
+LOTUS
+
+
+## Which Approach is Better?  What are the Best Practices so I can do this myself, quickly?
+
+* prefer simplicity.  If your schema is complex, can views solve a lot of the complexity?  
+* latency/performance.  The more agentic the solution becomes, the more _expensive_ it will become, it both time and token costs.  
+* Feedback loops are important.  
+* Work with your business users on "evaluations"
 
 
 other
