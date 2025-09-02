@@ -50,8 +50,11 @@ We'll start with the simplest solutions to setup and move along the path to solu
       * I can graph it using something like `matplotlib` or `plotly` in the browser
       * I can pass the results to the next step in the orchestration workflow
       * I can simply use the results to generate an answer to the original question.  
-* Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools
-* Full State Machine Approach
+  * [Screenshots of the Demo](./Demo/README.md)
+* Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools.  Let's walk through what this solution would look like.  
+  * The code will need some tweaking, but shows the Art of the Possible.  
+  * [Example Code using the LangChain family of tools](./langchain-nl2sql/README.md)
+* Full _State Machine_ Approach
 
 ```python
 def get_sql_process(self) -> KernelProcess:
