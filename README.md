@@ -38,9 +38,14 @@ As [Microsoft Innovation Hub's](https://www.microsoft.com/en-us/hub) analytics a
 
 ## Demos and Code You Can Do Yourself
 
+### Simplest Solution, get up and running in 10 minutes
+
 We'll start with the simplest solutions to setup and move along the path to solutions that require a bit more work but provide better results.  
 * The Fastest Time to Value:  [Fabric Data Agents](https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent)
-* The Easiest Approach if you aren't on Fabric: simply write a little code that directs an LLM as to how to query your db, then have a little code that executes the sql
+
+### "Non-Agentic" Approach (and next easiest)...
+
+The Easiest Approach if you aren't on Fabric: simply write a little code that directs an LLM as to how to query your db, then have a little code that executes the sql
   * Let's look at this in more detail...[structured_data_retreival_nltosql.ipynb](structured_data_retreival_nltosql.ipynb)
   * Key Concepts:
     * the _schema_ and _business logic_ is hardcoded right in the prompt
@@ -51,10 +56,57 @@ We'll start with the simplest solutions to setup and move along the path to solu
       * I can pass the results to the next step in the orchestration workflow
       * I can simply use the results to generate an answer to the original question.  
   * [Screenshots of the Demo](./Demo/README.md)
-* Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools.  Let's walk through what this solution would look like.  
+
+### Agentic Solution with LangChain "family" of tooling
+
+Use an orchestrator to build an agentic system: here's an example that is NOT code-complete, but shows how to do this with the LangChain family of tools.  Let's walk through what this solution would look like.  
   * The code will need some tweaking, but shows the Art of the Possible.  
   * [Example Code using the LangChain family of tools](./langchain-nl2sql/README.md)
+
+### Agentic Solution with Semantic Kernel -- Full State Machine Approach
+
 * Full _State Machine_ Approach
+  * This will be the one we build out together using Semantic Kernel as the agentic orchestrator
+  * [README](./sk-nl2sql/README.md)
+
+## Next Steps (_for your consideration_) ... OR ... _What does the future look like?_
+
+_How might we make these solutions BETTER?_
+
+### Augment the NL2SQL solution with RAG patterns
+
+When is this valuable?  
+* if you have a huge schema
+* if you have a schema that isn't _sane_.  ie, think of SAP's schema.  The table and col names are not "human-readable".  So, you'll need to augment the NL2SQL solution so the LLM knows which tables/cols have the relevant data to answer the question.  
+  * A simple way to avoid this is to code everything in VIEWS (a semantic tier).  _Views are your friend_
+* complex business logic that is difficult to express in SQL 
+* we can do this instead of _few-shot learning examples_ that we would need to hard-code somewhere
+
+[Here is some example code to get you started](./nlsql-search-index.md).  Let's discuss how this works together.  
+
+### Augment the NL2SQL solution using your data catalog
+
+This is a variant of the RAG pattern above.  **If** you have a data catalog already that has good schema descriptions and business rules, just query that as an agentic step and pass the information to the next agent in the chain.  
+
+### Evaluations (unit tests)
+
+We want our business people that will USE the nl2sql solution build their own evaluations.  Why?
+
+* As they use the solution they will construct NL queries that we haven't thought of that may not work.  We want these captured and the correct responses provided so we can ensure that when we make changes to the system in the future (new LLMs, changes to schema, etc) that we are not breaking existing functionality.  
+
+
+### GraphRAG 
+
+_Using RAG patterns against a Knowledge Graph_
+
+Standard relational dbs can't answer what I call _aggregation style analytics questions_ (this is SOLELY my term).  
+
+>Imagine this scenario:
+>I have call center transcripts in a database and I want to ask "probing" questions of the data?  "What are the Top 5 topics that our customers call about?"  And "Given those topics, what are the Top 5 things are customers RECOMMEND that we do to AVOID them calling us?"  
+
+
+
+
 
 ```python
 def get_sql_process(self) -> KernelProcess:
