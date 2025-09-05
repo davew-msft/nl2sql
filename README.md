@@ -11,6 +11,11 @@ Philadelphia, PA 19107
 
 Being able to _chat with your data_ gets your users closer to the promise of true self-service analytics.  This is known as NL2SQL.  These solutions can be created in under an hour against just about any database.  However, just being able to have an LLM understand what you are asking and convert the request to SQL statements tends to be underwhelming.  What you need are some advanced techniques that most people don't think about that will make your solution truly valuable for your business users.  I'll show you how to embed business logic for YOUR business directly in the process.  Then I'll show you how to write QUALITY tests to ensure your users are getting the RIGHT answers from your data and we'll even show you how to have your LLM predict similar questions that your users may ask and offer those SUGGESTIONS to your users.  Then we'll show you how to ask PRESCRIPTIVE questions about your data that are nearly impossible to answer with just SQL, such as "Why did my sales go down last quarter and how can I prevent that next quarter?".  Finally, I'll show you how to build an MCP server that your users can leverage to run their queries.  
 
+This is what we will hopefully build today:
+
+![NL2SQL Demo](./sk-nl2sql/natural_language_to_SQL/images/NL2SQL_GIF.gif)
+
+**This can be modified in just a few hours for YOUR data and use cases.**
 
 ### About Dave Wentzel
 
@@ -68,6 +73,8 @@ Use an orchestrator to build an agentic system: here's an example that is NOT co
 * Full _State Machine_ Approach
   * This will be the one we build out together using Semantic Kernel as the agentic orchestrator
   * [README](./sk-nl2sql/README.md)
+
+![NL2SQL State Machine](./sk-nl2sql/natural_language_to_SQL/images/sql.png)
 
 ## Next Steps (_for your consideration_) ... OR ... _What does the future look like?_
 
