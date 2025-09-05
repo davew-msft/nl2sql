@@ -72,7 +72,7 @@ Use an orchestrator to build an agentic system: here's an example that is NOT co
 
 * Full _State Machine_ Approach
   * This will be the one we build out together using Semantic Kernel as the agentic orchestrator
-  * [README](./sk-nl2sql/README.md)
+  * [README](./sk-nl2sql/README.md):  use the documentation here to build the solution on your own
 
 ![NL2SQL State Machine](./sk-nl2sql/natural_language_to_SQL/images/sql.png)
 
